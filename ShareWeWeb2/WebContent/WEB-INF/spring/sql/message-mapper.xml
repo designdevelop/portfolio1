@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+
+	<resultMap type="message" id="message">
+		<result property="receiver" column="receiver" />
+		<result property="sender" column="sender" />
+		<result property="tfdate" column="tfdate" />
+		<result property="content" column="content" />
+		<result property="checked" column="checked" />
+		<result property="messageid" column="messageid" />
+		<result property="title" column="title" />
+	</resultMap>
+
+	<insert id="sendMessage" >
+		INSERT INTO MESSAGE
+		(messageid, receiver, sender, title, content, tfdate,
+		checked, keep,
+		deleted) VALUES (message_seq.nextval, #{receiver},
+		#{sender}, #{title},
+		#{content}, SYSDATE, 'N', 'N', 'N')
+	</insert>
+
+	<select id="selectreceiver" resultMap="message">
+		select * from MESSAGE
+		where receiver = #{receiver} order by
+		TO_NUMBER(messageid)
+	</select>
+
+	<select id="selectView" resultMap="message">
+		select * from MESSAGE where
+		messageid = #{messageid}
+	</select>
+
+
+
+	<update id="setMessageChecked" >
+		UPDATE MESSAGE SET
+		checked = 'Y' WHERE messageid = #{messageid}
+	</update>
+
+	<delete id="deleteMessage" >
+		DELETE FROM MESSAGE
+		WHERE MESSAGEID = #{messageid}
+	</delete>
+
+	<select id="selectChecked"  resultType="java.lang.Integer">
+		SELECT COUNT(checked) AS result
+		  FROM MESSAGE
+		 WHERE checked = 'N'
+		   AND receiver = #{email}
+	</select>
+	
+	<insert id="ask" parameterType="com.adapter.sharewe.dto.MessageVO">
+		INSERT INTO MESSAGE (messageid, receiver, sender, title, content, tfdate, checked, keep, deleted) 
+		VALUES (message_seq.nextval, #{receiver}, #{sender}, #{title}, #{content}, SYSDATE, 'N', 'N', 'N')
+	</insert>
+	
+	
+</mapper>
+
+
+
+
+

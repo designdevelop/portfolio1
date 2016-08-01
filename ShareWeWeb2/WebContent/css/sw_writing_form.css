@@ -1,0 +1,164 @@
+@charset "utf-8";
+    
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #888;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #888;
+    opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #888;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #888;
+}
+:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+    color:    #888;
+}
+
+
+
+body{
+    background:#f1f1f1;
+}
+.sw_writing_name{
+    margin:20px auto 10px;
+    font-size:1.5em;
+    color:#fff;
+    background: #85dac5;
+    width:550px;
+    height:30px;
+    border-radius:5px;
+    text-align: center;
+    line-height: 30px;
+}
+
+
+
+textarea[placeholder]{
+    text-align: center;
+    font-size:0.9em;
+}
+
+
+
+.sw_writing_title_wrap>input[placeholder]{
+    text-align: center;
+    font-size:1.8em;
+    margin-left:43px;
+}
+.sw_writing_title_wrap{
+    background:#fff;
+    width:598px;
+    height:50px;
+    border:1px solid #ccc;
+    margin:0 auto 5px;
+}
+.sw_writing_title_wrap>input{
+    background-color:transparent;
+    vertical-align: middle;
+    width:500px;
+    height:50px;
+    border:none;
+    margin:0 0 0 20px;
+}
+.sw_writing_title_wrap>input[placeholder]{
+    text-align: center;
+}
+
+.sw_float_wrap{
+    margin:0 auto;
+    width:600px;
+}
+.sw_float_wrap:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+.sw_float_wrap>div{
+    background:#fff;
+    float:left;
+    width:295px;
+    height:35px;
+    border:1px solid #ccc;
+    margin:0 5px 0 0;
+}
+.sw_float_wrap>div:last-child{
+    margin-right:0;
+}
+
+.sw_float_wrap>div>input{
+    backgrou-color:transparent;
+    vertical-align: center;
+    width:260px;
+    height:35px;
+    border:none;
+    margin:0 0 0 20px;
+    
+}
+
+.sw_float_wrap>div>input[placeholder]{
+    text-align: center;
+}
+
+
+.sw_writing_sttalent_wrap, .sw_writing_thtalent_wrap, .sw_writing_loc, .sw_writing_career, .sw_writing_howi, .sw_writing_howthey, .sw_writing_content{
+    width:600px;
+    height:35px;
+    border:1px solid #ccc;
+    margin: 5px auto;
+    background:#fff;
+}
+.sw_writing_sttalent_wrap>input, .sw_writing_thtalent_wrap>input, .sw_writing_loc>input, .sw_writing_career>input, .sw_writing_howi>input, .sw_writing_howthey>input, .sw_writing_content>input{
+    background-color:transparent;
+    width:550px;
+    height:35px;
+    border:none;
+    margin:0 0 0 20px;
+}
+
+.sw_writing_sttalent_wrap>input[placeholder], .sw_writing_thtalent_wrap>input[placeholder], .sw_writing_loc>input[placeholder], .sw_writing_career>input[placeholder], .sw_writing_howi>input[placeholder], .sw_writing_howthey>input[placeholder], .sw_writing_content>input[placeholder]{
+    text-align: center;
+}
+
+.sw_writing_area{
+    margin:5px auto 0;
+    width:600px;
+	background: #fff;
+}
+.sw_writing_area>textarea{
+    width:540px;
+    height:340px;
+    min-width:540px;
+    min-height:350px;
+    max-width:540px;
+    max-height:340px;
+    padding:30px;  
+}
+
+.sw_writing_submit>a{
+    display:block;
+    width:80px;
+    background:#85dac5;
+    height:30px;
+    text-align: center;
+    line-height: 30px;
+    margin: 10px auto 0;
+    color:#fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

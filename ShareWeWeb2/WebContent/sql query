@@ -1,0 +1,369 @@
+- public class WritingDAO 
+
+
+	String sql = "SELECT TMINFO_TEXTID_SEQ.NEXTVAL AS seq FROM DUAL";
+
+public void insertWriting(TMInfoVO tVo){
+	String sql = "insert into TMINFO (textid,title,email,area,content,tmdate) values (TMINFO_TEXTID_SEQ.NEXTVAL,?,?,?,?,sysdate)";
+
+		
+public void insertWritingHashtags(TMinfoVO hVo){
+		
+	StringTokenizer mytalent = new StringTokenizer(hVo.getMyTalent(), "#,");
+	StringTokenizer wishtalent = new StringTokenizer(hVo.getWishTalent(),"#,");
+	
+public void insertWritingHashtag(TMHashtagVO hVo){
+	String sql = "insert into TMHASHTAG values (?,?,?)";	
+
+public void deleteHashtags(String textid) {
+		String sql = "DELETE FROM TMHASHTAG WHERE textid =?";
+
+public void deleteWriting(String textid){
+	String sql = "DELETE FROM TMINFO WHERE textid =?";
+
+public void updateTMInfoVO(TMInfoVO tVo){
+	String sql = "UPDATE TMINFO SET TITLE=?,AREA=?,CONTENT=? WHERE TEXTID=?";
+
+public TMInfoVO selectUpdate(String textid){
+	String sql = "SELECT T.*, H.mytalent, H.wishtalent FROM TMINFO T, (SELECT textid, LISTAGG(DECODE(UPPER(helper), 'ME', talent), ', ') WITHIN GROUP (ORDER BY textid) AS mytalent, LISTAGG
+
+(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP (ORDER BY textid) AS wishtalent FROM TMHASHTAG GROUP BY textid) H WHERE T.textid = H.textid AND T.textid = ?";	
+
+	
+
+public void deleteComment(String textid) {
+	String sql = "DELETE FROM COMMENTTABLE WHERE textid = ?";
+	
+
+
+
+
+
+
+
+-public class ViewingDAO 
+
+
+public TMInfoVO selectArticleByTextId(String tid) {
+	String sql = "select * from TMINFO where textid=?";
+
+public List<TMHashtagVO> selectTalentsMeByTextId(String tid) {
+	String sql = "select talent from TMHASHTAG where UPPER(HELPER) = 'ME' and textid=?";
+	
+
+public List<TMHashtagVO> selectTalentsYouByTextId(String tid) {
+	String sql = "select talent from TMHASHTAG where UPPER(HELPER) = 'YOU' and textid=?";
+
+
+
+public MemberInfoVO selectProfile(String tid) {
+	String sql = "select *from TMINFO a, MEMBERINFO b where a.email = b.email and textid = ?";
+
+
+
+public void insertComment(CommentVO tVo) {
+	String sql = "insert into COMMENTTABLE (textid,cmtdate,email,comment_text,comseq) values (?,sysdate,?,?,COMMENTTABLE_COMSEQ_SEQ.NEXTVAL)";
+
+
+public List<CommentVO> selectComment(String tid) {
+	String sql = "select * from COMMENTTABLE where textid=? order by cmtdate";
+
+
+public TMinfoVO selectTminfoDate(String tid) {
+	String sql = "select TO_CHAR(tmdate,'YYYY\"년\"MM\"월\"DD\"일\"')as tmdate from TMINFO where textid=?";
+
+
+
+public String getNextSeq(){
+	String sql = "SELECT COMMENTTABLE_COMSEQ_SEQ.NEXTVAL AS seq FROM DUAL";
+
+public void deleteComment(String comseq){
+	String sql = "DELETE FROM COMMENTTABLE WHERE comseq =?";
+
+public void updateComment(CommentVO tVo){
+	String sql = "UPDATE COMMENTTABLE SET COMMENT_TEXT=? WHERE COMSEQ=?";
+
+public void insertHanjool1(EvaluateVO tVo) {
+	String sql = "insert into EVALUATE (content,voteremail,evaluateid,targetemail,flag)
+values (?,?,EVALUATE_EVALUATEID_SEQ.NEXTVAL,?,UPPER(?))";
+
+
+
+public void insertHanjool2(EvaluateVO tVo) {
+	String sql = "insert into EVALUATE (content,voteremail,evaluateid,targetemail,flag)
+values (?,?,EVALUATE_EVALUATEID_SEQ.NEXTVAL,?,UPPER(?));
+";
+
+
+
+
+public String getHanSeq(){
+	String sql = "SELECT HANJOOL_HANSEQ_SEQ.NEXTVAL AS seq FROM DUAL";
+
+public List<EvaluateVO> selectHanjool(String email) {
+		String sql = "SELECT E.* , DECODE(flag, 'U', 'up.png', 'down.png') AS thumbimg  FROM EVALUATE E WHERE targetemail = ? ORDER BY TO_NUMBER(evaluateid)";
+
+//  DECODE(flag, 'U', 'up.png', 'down.png')    
+// flag 중 U 인것은 'up.png',  으로 바꾸고 아니면 'down.png' 으로 바꿔라
+
+public void deleteHanjool(String hanseq){
+	String sql = "DELETE FROM EVALUATE WHERE hanseq =?";
+
+
+public void updateHanjool(HanjoolVO tVo){
+	String sql = "UPDATE EVALUATE SET content=? WHERE evaluateid=?";
+
+
+
+
+
+
+
+
+
+-public class SearchDAO
+
+
+
+public List<TMInfoVO> searchItemList(String wishTalent){
+	String sql = "SELECT T.* , H.mytalent, H.wishtalent FROM TMINFO T, (SELECT textid, LISTAGG(DECODE(UPPER(helper), 'ME', talent), ', ') WITHIN GROUP (ORDER BY textid) AS mytalent, LISTAGG
+
+(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP (ORDER BY textid) AS wishtalent FROM TMHASHTAG GROUP BY textid  ) H WHERE T.textid = H.textid order by t.textId desc";
+
+
+
+
+
+
+
+
+-public class ProfileViewDAO {
+
+
+public MemberInfoVO getProfile(String email) {
+	String sql = "SELECT * FROM MEMBERINFO WHERE email = ?";
+	
+
+
+
+
+
+
+
+-public class MyPageDAO {
+
+public MemberInfoVO getMyInfo(String email) {
+	String sql = "SELECT * FROM MEMBERINFO WHERE EMAIL = ?";
+
+
+public void deletMyInfo(String email) {
+	String sql = "DELETE FROM MEMBERINFO WHERE EMAIL = ?";
+
+public void updateMyInfo(MemberInfoVO mVo) {
+	String sql = "UPDATE MEMBERINFO SET nickname=?,address=?, job=?, pwd=? WHERE email=?";
+
+
+//담아둔 재능 호출
+public List<TMInfoVO> getMyScrap(String email) {
+	String sql = "SELECT T.textid, T.title, T.email FROM TMREQUEST R, TMINFO T WHERE R.textid = T.textid AND R.email = ? AND R.rcode = '찜'";
+	
+	
+// 제안한 재능 호출
+public List<TMInfoVO> getMyOffer(String email) {
+	String sql = "SELECT * FROM TMINFO WHERE EMAIL = ?";
+	
+// 담아둔재능 삭제
+public void deleteScrap(String email) {
+	String sql = "DELETE FROM TMREQUEST WHERE textid = ?";
+
+public void deleteEachScrap(TMRequestVO rVo) {
+	String sql = "DELETE FROM TMREQUEST WHERE textid = ? AND email = ? AND rcode = '찜'";
+
+// 한줄평 호출
+public List<EvaluateVO> getMyComment(String server) {
+	String sql = "SELECT VOTEREMAIL, content, flag FROM Evaluate WHERE targetemail = ? ";
+
+
+
+
+
+
+
+
+
+
+-public class MessageDAO {
+
+
+	
+public int sendMessage(MessageVO mVo){
+	String sql = "INSERT INTO MESSAGE (messageid, receiver, sender, title, content, tfdate, checked, keep, deleted) VALUES (message_seq.nextval, ?, ?, ?, ?, SYSDATE, 'N', 'N', 'N')";
+	
+
+public List<MessageVO> selectreceiver(String receiver){
+	String sql = "select * from MESSAGE where receiver = ? order by TO_NUMBER(messageid)";
+
+	
+public MessageVO selectView(String messageid){
+	String sql = "select * from MESSAGE where messageid = ? ";
+
+
+public void setMessageChecked(String messageid) {
+	String sql = "UPDATE MESSAGE SET checked = 'Y' WHERE messageid = ?";
+
+public void deleteMessage(String messageid) {
+	String sql = "DELETE FROM MESSAGE WHERE MESSAGEID = ?";
+
+
+public int selectChecked(String email){
+	String sql = "select COUNT(CHECKED) AS RESULT from MESSAGE WHERE CHECKED='N' AND RECEIVER=?";
+
+
+
+
+
+
+
+
+
+
+-public class MemberDAO {
+
+
+
+public int loginCheck(String email, String pwd){
+	String sql = "select pwd from memberinfo where email=?";
+
+
+
+public MemberInfoVO getMember(String email){
+	String sql = "select * from memberinfo where email=?";
+
+
+public void insertMember(MemberInfoVO miVO){
+	String sql = "insert into MEMBERINFO (email, pwd, nickname, address, job, gender, phone,picture) values(?, ?, ?, ?, ?, ?, ?, ?)";
+
+
+public void insertMemberCheck(MemberCheckVO mcVO){
+	String sql = "insert into MEMBERCHECK (email, joindate, joincheck) values(?, sysdate, 'N')";
+
+
+public int validateMember(String email){
+	String sql = "UPDATE MEMBERCHECK SET joincheck = 'Y' WHERE email = ?";
+
+
+public List<TMInfoVO> getInfo(String email){
+	String sql = "select * from TMINFO where email=?";
+
+
+
+
+
+
+
+
+
+
+-public class MatchingDAO {
+
+
+
+	// scrap 담아둔재능
+public void scrapTMInfo(TMRequestVO rVo) {
+	String sql = "INSERT INTO TMREQUEST VALUES (?, ?, '찜')";
+
+
+
+public void scrapTMDel(String textid) {
+	String sql = "DELETE FROM TMREQUEST WHERE textid =?";
+
+
+
+public List<MemberInfoVO> selectTeacher(String email) {
+	String sql = "SELECT T.email, M.nickname FROM TMINFO T, (SELECT W.* FROM TMHASHTAG W, (SELECT H.* FROM TMHASHTAG H, (SELECT * FROM TMINFO WHERE email = ?) T WHERE 
+
+H.textid = T.textid AND UPPER(H.helper) = 'YOU') H WHERE H.talent = W.talent AND UPPER(W.helper) = 'ME' AND W.textid NOT IN (SELECT textid FROM TMINFO WHERE email = ?)) H, MEMBERINFO M 
+
+WHERE T.textid = H.textid AND T.email = M.email";
+	
+
+
+
+public List<MemberInfoVO> selectStudent(String email){
+	String sql = "SELECT T.email, M.nickname FROM TMINFO T, (SELECT W.* FROM TMHASHTAG W, (SELECT H.* FROM TMHASHTAG H, (SELECT * FROM TMINFO WHERE email = ?) T WHERE 
+
+H.textid = T.textid AND UPPER(H.helper) = 'ME') H WHERE H.talent = W.talent AND UPPER(W.helper) = 'YOU' AND W.textid NOT IN (SELECT textid FROM TMINFO WHERE email = ?)) H, MEMBERINFO M 
+
+WHERE T.textid = H.textid AND T.email = M.email";
+
+
+
+
+public TMInfoVO selectWinwin(String talent) {
+	String sql = "SELECT M.*FROM MEMBERINFO M , ( SELECT T.* FROM TMINFO T , (SELECT textid FROM TMHASHTAG  WHERE talent = ? and helper = 'you' or talent = ? and helper = 'me') H 
+
+WHERE T.textid = H.textid) T WHERE T.email = M.email";
+
+
+
+
+
+
+
+
+
+
+
+
+-public class GraphBarDAO {
+
+
+
+public GraphBarVO graphBar(String email){
+	String sql = "SELECT targetemail , COUNT(*) AS cnt , SUM(DECODE(flag, 'U', 1, 0)) AS up ,SUM(DECODE(flag, 'D', 1, 0)) AS down FROM evaluate WHERE targetemail = ? GROUP BY targetemail";
+	
+
+
+
+
+
+
+
+
+
+
+
+
+-public class ContentArticleDAO {
+
+
+public List<TMInfoVO> selectAllList(){
+	String sql = "SELECT T.textid, SUBSTR(title, 1, 25) AS title, email, area, SUBSTR(content, 1, 110) AS content, H.mytalent, H.wishtalent FROM TMINFO T, (SELECT textid, LISTAGG(DECODE(UPPER
+
+(helper), 'ME', talent), ', ') WITHIN GROUP (ORDER BY textid) AS mytalent, LISTAGG(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP (ORDER BY textid) AS wishtalent FROM TMHASHTAG GROUP 
+
+BY textid  ) H WHERE T.textid = H.textid order by TO_NUMBER(t.textId) desc";
+
+
+
+
+public List<TMInfoVO> wishTalentSearch(String talent){
+	String ddd = " = ?";
+		
+	if(talent.length()==0){
+		ddd = " LIKE '%'||?||'%'";
+	}
+	
+	String sql = "SELECT T.* , H.mytalent , H.wishtalent FROM TMINFO T , (SELECT textid, LISTAGG(DECODE(UPPER(helper), 'ME', talent), ', ') WITHIN GROUP (ORDER BY textid) AS mytalent , 
+
+LISTAGG(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP (ORDER BY textid) AS wishtalent FROM TMHASHTAG GROUP BY textid )H WHERE T.textid = H.textid AND T.textid IN ( SELECT textid 
+
+FROM TMHASHTAG WHERE UPPER(helper) = 'YOU' AND talent" + ddd + ")";
+
+
+
+
+
+
+
+

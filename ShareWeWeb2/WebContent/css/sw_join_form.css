@@ -1,0 +1,153 @@
+@CHARSET "UTF-8";
+    
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #888;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #888;
+    opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #888;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #888;
+}
+:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+    color:    #888;
+}
+
+body{
+    background:#eee;
+}
+
+.sw_join_name{
+    margin:20px auto 10px;
+    font-size:1.5em;
+    color:#fff;
+    background: #85dac5;
+    width:550px;
+    height:30px;
+    border-radius:5px;
+    text-align: center;
+    line-height: 30px;
+}
+
+fieldset>div{
+    margin: 0 auto 30px auto;
+    width:600px;
+}
+
+div.line{
+    background:#fff;
+    width:598px;
+    height:30px;
+    border:1px solid #ccc;
+    margin:0 auto 5px;
+}
+
+div.inline{
+    display: inline-block;
+}
+
+div.inline label{
+	width: 296px;
+    display: block;
+    height: 30px;
+    text-align: center;
+    padding: 7px 0px;
+    box-sizing: border-box;
+}
+
+div.inline input{
+	margin: 0;
+	display: none;
+}
+
+select.inline{
+	display: inline;
+	margin: 0 0 0 50px;
+	width: 100px;
+}
+input.inline{
+    margin: 0 50px 0 0;
+    display: inline;
+    width: 393px;
+}
+
+div.sw_join_zipcode_wrap.line>input[type=text]{
+    width: 450px;
+}
+
+div.sw_join_zipcode_wrap.line>input[type=button]{
+    width: 93px;
+    background: #85dac5;
+    height: 26px;
+    text-align: center;
+    line-height: 26px;
+    margin: 0;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size:0.9em;
+}
+
+fieldset>div input, fieldset>div select{
+    background-color:transparent;
+    vertical-align: middle;
+    width:500px;
+    height:30px;
+    border:none;
+    margin:0 0 0 25px;
+}
+
+fieldset>div>a{
+    display:block;
+    width:80px;
+    background:#85dac5;
+    height:30px;
+    text-align: center;
+    line-height: 30px;
+    margin: 10px auto 0;
+    color:#fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+
+
+
+
+.sW_join_submit_btn{
+	width:100px;
+	height:30px;
+	background:#85dac5;
+	color:#fff;
+	font-weight:bold;
+	border-radius:5px;
+	margin-left:45%;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

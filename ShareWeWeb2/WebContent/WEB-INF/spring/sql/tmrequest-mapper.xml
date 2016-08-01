@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="tmrequest" id="tmrequestMapper">
+		<result property="textid" column="textid" />
+		<result property="email" column="email" />
+		<result property="rcode" column="rcode" />
+	</resultMap>
+
+	<insert id="scrap" parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		INSERT INTO TMREQUEST
+		VALUES (#{textid}, #{email}, '찜')
+	</insert>
+
+	<delete id="scrapTMDel" parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		DELETE FROM TMREQUEST
+		WHERE textid = #{textid}
+	</delete>
+	<delete id="deleteEachScrap" parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		DELETE FROM TMREQUEST WHERE textid = #{textid} AND email = #{email} AND rcode = '찜'
+	</delete>
+	
+	
+
+</mapper>

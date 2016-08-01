@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="memberinfo" id="memberinfoMapper">
+		<result property="email" column="email" />
+		<result property="pwd" column="pwd" />
+		<result property="nickname" column="nickname" />
+		<result property="gender" column="gender" />
+		<result property="address" column="address" />
+		<result property="phone" column="phone" />
+		<result property="job" column="job" />
+		<result property="picture" column="picture" />
+	</resultMap>
+
+	<select id="getAllMembers" resultMap="memberinfoMapper">
+		SELECT nickname, email,
+		phone from memberinfo
+	</select>
+
+	<select id="profileMembers" resultMap="memberinfoMapper">
+		SELECT * from memberinfo where email=#{email}
+	</select>
+		
+	
+	<insert id="insertMember" parameterType="com.adapter.sharewe.dto.MemberInfoVO">
+		insert into MEMBERINFO
+		(email, pwd, nickname, address, job, gender, phone,picture)
+		values(#{email}, #{pwd}, #{nickname}, #{address}, #{job}, #{gender},
+		#{phone}, '')
+	</insert>
+
+	<select id="confirmId" resultMap="memberinfoMapper">
+		select email from MEMBERINFO
+		where email=#{email}
+	</select>
+
+	<select id="loginCheck" resultMap="memberinfoMapper">
+		select pwd from MEMBERINFO
+		where email=#{email}
+	</select>
+
+	<select id="login" resultMap="memberinfoMapper">
+		select * from MEMBERINFO where
+		email=#{email}
+	</select>
+
+	<select id="getMyInfo" resultMap="memberinfoMapper">
+		SELECT * FROM MEMBERINFO WHERE
+		EMAIL = #{email}
+	</select>
+	
+	<update id="updateMyInfo">
+		UPDATE MEMBERINFO
+		   SET address=#{address, jdbcType=VARCHAR}
+		     , job=#{job, jdbcType=VARCHAR}
+		     ,picture=#{picture, jdbcType=VARCHAR}
+		 WHERE email=#{email, jdbcType=VARCHAR}
+	</update>
+
+	<select id="selectTeacher" resultMap="memberinfoMapper">
+		SELECT T.email, M.nickname , M.PICTURE
+		FROM TMINFO T, (SELECT W.* FROM TMHASHTAG W, (SELECT H.* FROM
+		TMHASHTAG H, (SELECT * FROM TMINFO WHERE email = #{email}) T WHERE
+
+		H.textid = T.textid AND UPPER(H.helper) = 'YOU') H WHERE H.talent =
+		W.talent
+		AND UPPER(W.helper) = 'ME' AND W.textid NOT IN (SELECT textid
+		FROM
+		TMINFO WHERE email = #{email})) H, MEMBERINFO M
+
+		WHERE T.textid =
+		H.textid AND T.email = M.email
+	</select>
+
+	<select id="selectStudent" resultMap="memberinfoMapper">
+		SELECT T.email, M.nickname , M.PICTURE
+		FROM TMINFO T, (SELECT W.* FROM TMHASHTAG W,
+		(SELECT H.* FROM TMHASHTAG
+		H, (SELECT * FROM TMINFO WHERE email = #{email}) T WHERE
+
+		H.textid =
+		T.textid AND UPPER(H.helper) = 'ME') H WHERE H.talent = W.talent
+		AND
+		UPPER(W.helper) = 'YOU' AND W.textid NOT IN (SELECT textid FROM
+		TMINFO
+		WHERE email = #{email})) H, MEMBERINFO M
+
+		WHERE T.textid = H.textid AND
+		T.email = M.email
+	</select>
+
+	<select id="selectWinwin" resultMap="memberinfoMapper">
+		SELECT M.*
+		  FROM TMINFO T
+		     , MEMBERINFO M
+		 WHERE T.email = M.email
+		   AND T.textid IN (
+		                    SELECT textid
+		                      FROM (
+		                            SELECT textid
+		                                 , LISTAGG(helper) WITHIN GROUP (ORDER BY textid) AS helpers
+		                              FROM (
+		                                    SELECT MATCHEDHASHTAG.*
+		                                      FROM TMHASHTAG MATCHEDHASHTAG
+		                                         , (
+		                                            SELECT *
+		                                              FROM TMHASHTAG
+		                                             WHERE textid IN (/*접속자가 쓴 글의 textid*/SELECT textid FROM TMINFO WHERE email = #{email})
+		                                      ) PARAMINGHASHTAG
+		                                     WHERE DECODE(MATCHEDHASHTAG.helper, 'me', 'you')||MATCHEDHASHTAG.talent = PARAMINGHASHTAG.helper||PARAMINGHASHTAG.talent
+		                                        OR DECODE(MATCHEDHASHTAG.helper, 'you', 'me')||MATCHEDHASHTAG.talent = PARAMINGHASHTAG.helper||PARAMINGHASHTAG.talent
+		                              )
+		                             GROUP BY textid
+		                      )
+		                     WHERE INSTR(helpers, 'me') != 0
+		                       AND INSTR(helpers, 'you') != 0
+		   )
+	</select>
+	
+	<select id="getInfo" resultMap="memberinfoMapper">
+		select * from TMINFO where email=#{email}
+	</select>
+	
+	<select id="getMember" resultMap="memberinfoMapper">
+		select * from MEMBERINFO where email=#{email}
+	</select>
+	
+	<select id="selectpicture" resultMap="memberinfoMapper">
+	 	select picture from MEMBERINFO where email = #{email}
+	</select>
+
+</mapper>

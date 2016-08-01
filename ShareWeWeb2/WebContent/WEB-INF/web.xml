@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>ShareWeWeb</display-name>
+	<context-param> <!--  이녀석은 루트 컨텍스트로 모든 서블릿과 필터들이 공유한다고 합니다. 바로 root-context.xml을 정의해 두었네요 -->
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/*-context.xml</param-value>
+	</context-param>
+	
+	
+	<!-- 스프링 DI AOP를 위한 설정 -->
+	<listener><!-- 이녀석은 말그대로 listenerd이구요 루트 컨텍스터에 정의되어 있는 것들을 모든 서블릿과 필터가 공유할 수 있게 해준다네요.  -->
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- MVC 패턴을 위한 설정 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/spring/appServlet/servlet-context.xml
+				/WEB-INF/spring/root-context.xml
+				/WEB-INF/spring/ws-config.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/error/no_such_page.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/error/session_expired.jsp</location>
+	</error-page>
+	
+	<welcome-file-list>
+		<welcome-file>intro.do</welcome-file>
+	</welcome-file-list>
+</web-app>

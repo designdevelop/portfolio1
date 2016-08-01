@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="graphbar" id="graphbarMapper">
+		<result property="cnt" column="cnt" />
+		<result property="up" column="up" />
+		<result property="down" column="down" />
+		<result property="targetemail" column="targetemail" />
+	</resultMap>
+
+	<select id="graphBar" resultMap="graphbarMapper">
+		SELECT targetemail , COUNT(*) AS cnt , SUM(DECODE(flag, 'U', 1, 0)) AS up
+		,SUM(DECODE(flag, 'D', 1, 0)) AS down FROM evaluate WHERE targetemail
+		= #{email} GROUP BY targetemail
+	</select>
+	
+</mapper>

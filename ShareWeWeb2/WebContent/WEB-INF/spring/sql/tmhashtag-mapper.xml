@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="tmhashtag" id="tmhashtagMapper">
+		<result property="textid" column="textid" />
+		<result property="helper" column="helper" />
+		<result property="talent" column="talent" />
+		<result property="mytalent" column="mytalent" />
+		<result property="wishtalent" column="wishtalent" />
+	</resultMap>
+
+	<!-- ME 해시태그 불러오기 -->
+	<select id="selectTalentsMeByTextId" resultMap="tmhashtagMapper"
+		parameterType="com.adapter.sharewe.dto.TMHashtagVO">
+		select talent from TMHASHTAG where UPPER(HELPER) = 'ME'
+		and textid= #{textid}
+	</select>
+
+	<!-- YOU 해시태그 불러오기 -->
+	<select id="selectTalentsYouByTextId" resultMap="tmhashtagMapper"
+		parameterType="com.adapter.sharewe.dto.TMHashtagVO">
+		select talent from TMHASHTAG where UPPER(HELPER) = 'YOU'
+		and textid= #{textid}
+	</select>
+
+	<!-- 해시태그 삭제 -->
+	<delete id="deleteHashtags" parameterType="com.adapter.sharewe.dto.TMHashtagVO">
+		DELETE FROM TMHASHTAG	WHERE textid =#{textid}
+	</delete>
+
+	<!-- 해시태그 저장 -->
+	<insert id="insertWritingHashtags" parameterType="com.adapter.sharewe.dto.TMHashtagVO">
+		insert into
+		TMHASHTAG(textid,helper,talent) values (#{textid},#{helper},#{talent})
+	</insert>
+
+	<!-- 해시태그 불러오기 -->
+	<select id="selectTalents" resultMap="tmhashtagMapper">
+		SELECT textid,
+		LISTAGG(DECODE(UPPER(helper), 'ME', '#'||talent), ', ') WITHIN GROUP
+		(ORDER BY textid) AS mytalent,
+		LISTAGG(DECODE(UPPER(helper), 'YOU', '#'||talent), ', ') WITHIN GROUP (ORDER BY textid) AS
+		wishtalent
+		FROM TMHASHTAG where textid= #{textid} GROUP BY textid
+	</select>
+
+
+
+
+
+
+
+
+</mapper>

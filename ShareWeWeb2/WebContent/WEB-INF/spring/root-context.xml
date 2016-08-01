@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/jdbc 
+	http://www.springframework.org/schema/jdbc/spring-jdbc.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+
+	<bean id="homeController" class="com.adapter.sharewe.controller.HomeController" />
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver	" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="javauser" />
+		<property name="password" value="1234" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="/WEB-INF/spring/mybatis-config-base.xml" />
+
+		<property name="mapperLocations">
+			<list>
+				<value>/WEB-INF/spring/sql/memberinfo-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/tminfo-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/tmrequest-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/commenttable-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/evaluate-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/tmhashtag-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/message-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/membercheck-mapper.xml</value>
+				<value>/WEB-INF/spring/sql/graphBar-mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 커밋과 롤백의 스프링 자동적용 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 소스코드에 어노테이션 트랜잭션 활용 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<bean id="advice" class="com.adapter.sharewe.aop.Advices"/>
+
+	<aop:config>
+		<aop:pointcut expression="execution(* com..*Controller.*(..))" id="callAdvice"/>
+		<!-- *(.., org.springframework.ui.Model, .., javax.servlet.http.HttpServletRequest, ..) -->
+		<aop:aspect id="aspect" ref="advice">
+			<aop:before method="beforeCall" pointcut-ref="callAdvice"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
+ 

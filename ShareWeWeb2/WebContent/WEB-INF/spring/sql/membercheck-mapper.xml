@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="membercheck" id="membercheckMapper">
+		<result property="email" column="email" />
+		<result property="joinDate" column="joinDate" />
+		<result property="joinCheck" column="joinCheck" />
+	</resultMap>
+
+	<insert id="insertMemberCheck" parameterType="com.adapter.sharewe.dto.MemberCheckVO">
+		insert into
+		MEMBERCHECK (email, joindate, joincheck) values(#{email}, sysdate,'N')
+	</insert>
+
+	<update id="validateMember" parameterType="com.adapter.sharewe.dto.MemberCheckVO">
+		UPDATE MEMBERCHECK SET
+		joincheck = 'Y' WHERE email = #{email}
+	</update>
+
+</mapper>

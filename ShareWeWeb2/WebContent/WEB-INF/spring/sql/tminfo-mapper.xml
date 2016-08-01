@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+	<resultMap type="tminfo" id="tminfoMapper">
+		<result property="textid" column="textid" />
+		<result property="title" column="title" />
+		<result property="email" column="email" />
+		<result property="area" column="area" />
+		<result property="content" column="content" />
+		<result property="tmdate" column="tmdate" />
+		<result property="mytalent" column="mytalent" />
+		<result property="wishtalent" column="wishtalent" />
+	</resultMap>
+
+
+	<!-- 글 내용 불러오기 -->
+	<select id="selectArticleByTextId" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		select * from TMINFO where textid= #{textid}
+	</select>
+
+	<!-- 시간 -->
+	<select id="selectTminfoDate" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		select TO_CHAR(tmdate,'YYYY"년"MM"월"DD"일"') as tmdate
+		from
+		TMINFO where
+		textid= #{textid}
+	</select>
+
+	<!-- 저장된 정보 불러오기 -->
+	<select id="selectUpdate" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT * FROM TMINFO WHERE TEXTID= #{textid}
+	</select>
+
+	<!-- index화면 content -->
+	<select id="selectAllList" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT T.textid
+		, SUBSTR(title, 1, 25) AS title
+		, email
+		,
+		area
+		, SUBSTR(content, 1, 110) AS content
+		, H.mytalent
+		, H.wishtalent
+		FROM TMINFO T
+		, (
+		SELECT textid
+		, LISTAGG(DECODE(UPPER(helper), 'ME',
+		talent), ', ') WITHIN GROUP
+		(ORDER BY textid) AS mytalent
+		,
+		LISTAGG(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP
+		(ORDER BY textid) AS wishtalent
+		FROM TMHASHTAG GROUP BY textid
+		) H WHERE
+		T.textid = H.textid
+		order by TO_NUMBER(t.textId) desc
+	</select>
+
+
+	<!-- tminfo수정 -->
+	<update id="updateTMInfoVO">
+		UPDATE TMINFO SET
+		TITLE=#{title},AREA=#{area},CONTENT=#{content} WHERE TEXTID=#{textid}
+	</update>
+
+	<!-- 글 지우기 -->
+	<delete id="deleteWriting" parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		DELETE FROM TMINFO	WHERE textid =#{textid}
+	</delete>
+
+	<!-- 글 저장 -->
+	<insert id="insertWriting" parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		insert into TMINFO
+		(textid,title,email,area,content,tmdate)
+		values
+		(#{textid},#{title},#{email},#{area},#{content},sysdate)
+	</insert>
+
+
+	<select id="getNextSeq" resultType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT
+		TO_CHAR(TMINFO_TEXTID_SEQ.NEXTVAL) AS seq FROM DUAL
+	</select>
+
+
+	<select id="wishTalentSearch" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT T.* , H.mytalent , H.wishtalent
+		FROM TMINFO T ,
+		(SELECT textid, LISTAGG(DECODE(UPPER(helper), 'ME', talent), ', ') WITHIN
+		GROUP (ORDER BY textid) AS mytalent ,
+		LISTAGG(DECODE(UPPER(helper), 'YOU', talent), ', ') WITHIN GROUP (ORDER BY textid) AS wishtalent
+		FROM TMHASHTAG GROUP BY textid )H WHERE T.textid = H.textid AND
+		T.textid IN ( SELECT textid FROM TMHASHTAG WHERE UPPER(helper) = 'YOU'
+		AND talent LIKE '%'||#{talent}||'%' )
+
+	</select>
+	<select id="getMyScrap" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT T.textid, T.title, T.email FROM TMREQUEST R, TMINFO T
+		WHERE R.textid = T.textid AND R.email = #{email} AND R.rcode = '찜'
+	</select>
+
+	<select id="getMyOffer" resultMap="tminfoMapper"
+		parameterType="com.adapter.sharewe.dto.TMinfoVO">
+		SELECT * FROM TMINFO WHERE EMAIL = #{email}
+	</select>
+	<delete id="deleteScrap">
+	
+	</delete>
+
+
+
+
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+
+	<resultMap type="evaluate" id="evaluate">
+		<result property="content" column="content" />
+		<result property="voteremail" column="voteremail" />
+		<result property="evaluateid" column="evaluateid" />
+		<result property="targetemail" column="targetemail" />
+		<result property="flag" column="flag" />
+	</resultMap>
+
+
+	<insert id="insertHanjool1" >
+		insert into EVALUATE
+		(content,voteremail,evaluateid,targetemail,flag) values
+		(#{content},#{voteremail},EVALUATE_EVALUATEID_SEQ.NEXTVAL,#{targetemail},UPPER(#{flag}))
+	</insert>
+
+	<insert id="insertHanjool2">
+		public void
+		insertHanjool2(EvaluateVO tVo) {
+		insert into EVALUATE
+		(content,voteremail,evaluateid,targetemail,flag) values
+		(#{content},#{voteremail},EVALUATE_EVALUATEID_SEQ.NEXTVAL,#{targetemail},UPPER(#{flag}))
+	</insert>
+
+
+	<select id="selectHanjool" resultMap="evaluate">
+		SELECT E.* , DECODE(flag,
+		'U', 'up.png', 'down.png') AS thumbimg FROM
+		EVALUATE E WHERE
+		targetemail = #{targetemail} ORDER BY
+		TO_NUMBER(evaluateid)
+	</select>
+
+	<delete id="deleteHanjool" >
+		DELETE FROM EVALUATE
+		WHERE evaluateid = #{param1}
+	</delete>
+
+	<update id="updateHanjool" >
+		UPDATE EVALUATE SET
+		content=#{param1} WHERE evaluateid=#{param2}
+	</update>
+
+	<select id="getMyComment" resultMap="evaluate">
+		SELECT VOTEREMAIL, content,
+		flag FROM Evaluate WHERE targetemail =
+		#{targetemail}
+	</select>
+
+</mapper>

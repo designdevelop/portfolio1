@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.java namespace -->
+
+<mapper namespace="com.adapter.sharewe.mapper.MemberMapper">
+
+<resultMap type="commenttable" id="commenttable">
+	<result property="comment_text" column="comment_text" />
+	<result property="email" column="email" />
+	<result property="cmtdate" column="cmtdate" />
+	<result property="comseq" column="comseq" />
+	<result property="textid" column="textid" />
+</resultMap>
+
+<insert id="insertComment" parameterType="commenttable">
+insert into COMMENTTABLE (textid,cmtdate,email,comment_text,comseq) 
+values ( #{param1},sysdate, #{param2}, #{param3},COMMENTTABLE_COMSEQ_SEQ.NEXTVAL)
+</insert>
+
+<select id="selectComment" resultType="commenttable">
+SELECT C.*
+     , M.NICKNAME
+  FROM COMMENTTABLE C
+     , MEMBERINFO M
+ WHERE C.email = M.email
+    AND C.textid = #{textid}
+ ORDER BY cmtdate DESC
+
+</select>
+
+<delete id="deleteComment" parameterType="commenttable">
+DELETE FROM COMMENTTABLE WHERE comseq = #{comseq}
+</delete>
+
+<update id="updateComment">
+UPDATE COMMENTTABLE SET COMMENT_TEXT= #{param1} WHERE COMSEQ= #{param2}
+</update>
+
+
+<!-- 제안한 재능 삭제 - Comments 삭제 -->
+<delete id="deleteComments" parameterType="commenttable">
+	DELETE FROM COMMENTTABLE WHERE textid = #{textid}
+</delete>
+
+</mapper>
+
